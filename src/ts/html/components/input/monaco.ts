@@ -48,7 +48,7 @@ monaco.editor.defineTheme("riscv-dark", {
     { token: "invalid",            foreground: COLORS.pink   }, // palered
   ],
   colors:  {
-    "editor.background": getComputedStyle(document.documentElement).getPropertyValue('--black2').trim(),
+    "editor.background": "#222222",
   },
 });
 
