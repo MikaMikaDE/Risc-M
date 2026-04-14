@@ -1,0 +1,232 @@
+/* ------------------------------------------------------------------------- */
+/* CORE */
+/* ------------------------------------------------------------------------- */
+
+:root{
+  --black0  : #000000;
+  --black0_5: #0a0a0a;
+  --black1  : #111111;
+  --black1_5: #151515;
+  --black2  : #222222;
+  --black2_5: #252525;
+  --black3  : #333333;
+  --black3_5: #353535;
+  --black5  : #555555;
+  --black7  : #777777;
+
+  --blue  :#569EE6;
+  --green :#88CC88;
+  --pink  :#CC88CC;
+  --red   :#DB7093;
+  --yellow:#EEE8AA;
+  --orange:#DD8855;
+}
+
+*{
+    font-family: monospace;
+    &::-webkit-scrollbar            { background-color: var(--black2); width: 10px; height: 10px }
+    &::-webkit-scrollbar-corner     { background-color: var(--black2);                           }
+    &::-webkit-scrollbar-thumb      { background-color: var(--black5);                           }
+    &::-webkit-scrollbar-thumb:hover{ background-color: var(--black7); cursor: move;             }
+    &::selection                    { background-color: coral      ; color : var(--black0);    }
+    margin: 0;
+}
+
+
+
+/* ------------------------------------------------------------------------- */
+/* GRID */
+/* ------------------------------------------------------------------------- */
+#grid {
+    --gap:1vw;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap);
+    width  : 98% ; margin:   1vw;
+    background-color  :var(--black1);
+    color: white;
+    section .box:first-child{ min-height: 6em; } /*same height for each box 1st in row*/
+/* ------------------------------------------------------------------------- */
+/* Boxes */
+/* ------------------------------------------------------------------------- */
+    h1,h2    { 
+      font-size  : 1.2em;
+      line-height: 1.8em;
+      text-align : center; 
+      margin-bottom: 5px;
+      background-color:  var(--black1);
+      border : 1px solid var(--black2);
+      outline: 1px solid var(--black0);
+      border-radius: 3px;;
+    }
+    .box {
+        border          : 1px solid var(--black3);
+        background-color:           var(--black2);
+        outline         : 1px solid var(--black0);
+        overflow-x      : scroll;
+        margin          : 0;
+        width           : 98%; padding: 1%;
+        margin-bottom   : var(--gap);
+        position        : relative;
+        border-radius   : 3px;
+    }
+/* ------------------------------------------------------------------------- */
+/* Table */
+/* ------------------------------------------------------------------------- */
+    table    {
+      text-align     : left;
+      width          : calc(100% - 2px); border: 1px solid var(--black0);
+      box-shadow     : 0px 1px 3px var(--black1);
+      border-collapse: collapse;
+      cursor         : text;
+      white-space: pre;
+      th{
+        background-color: var(--black1);
+        border-bottom   :2px solid var(--black0);
+        height: 1.5em;
+      }
+      tr{ 
+        background:                   var(--black1  ); &:hover{background:var(--black3);}
+        &:nth-child(even){background: var(--black1_5); &:hover{background:var(--black3);}}
+        &.nonzero {       background: #222233;       &:hover{background:#333344;    }}
+        line-height   : 1em; 
+        font-size     : 1em;
+      }
+    }
+/* ------------------------------------------------------------------------- */
+/* Closer */
+/* ------------------------------------------------------------------------- */
+    --btnCol: #9e2828;
+    button.closer{
+      border             : 1px solid;
+      outline            : 2px solid var(--black2);
+      background-color   : var(--btnCol);
+      border-radius: 3px;
+      position: absolute;
+      top  : 0.1em; right:0.1em;
+      width: 2em  ; height: 2em;
+      &:hover{color: white; cursor: pointer; }
+    }
+    .hidden{ 
+      display: none; 
+       & + button.closer{
+        transform: rotateX(180deg);
+        background-color: color-mix(in srgb, var(--btnCol) 90%, black 50%);
+      }
+    }
+/* ------------------------------------------------------------------------- */
+/* Buttons */
+/* ------------------------------------------------------------------------- */
+    button { 
+      font-weight: bold; 
+      width      : 100%; 
+      height     : 2em;
+      border       : 2px solid var(--black2); 
+      border-top   : 2px solid var(--black5); 
+      border-bottom: 2px solid var(--black1); 
+      outline      : 1px solid var(--black0);
+      z-index: 1;
+      &:first-of-type{ border-top-left-radius : 3px; border-bottom-left-radius : 3px; }
+      &:last-of-type { border-top-right-radius: 3px; border-bottom-right-radius: 3px; }
+      &:hover, &:active { 
+        border     : 1px solid #aaa; 
+        text-shadow: 0px 2px 4px var(--black0), 0px 1px 2px var(--black0); 
+        color      : white; 
+        cursor     : pointer;
+        z-index: 2;
+      }
+    }
+    #buttons {
+      display: grid;
+      --numBtns: 6;
+      grid-template-columns: repeat(var(--numBtns), calc(100% / var(--numBtns)));
+      #btn_start{background-color: var(--green); }
+      #btn_step {background-color: var(--green); }
+      #btn_slow {background-color: var(--green); }
+      #btn_reset{background-color: var(--red  ); }
+      #btn_halt {background-color: var(--red  ); }
+      #btn_help {background-color: var(--blue ); }
+    }
+/* ------------------------------------------------------------------------- */
+/* Box Content */
+/* ------------------------------------------------------------------------- */
+    pre {
+        width: calc(100% - 2px - 2%); padding: 1%;
+        background-color : var(--black3_5);
+        border : 1px solid var(--black2_5);
+        outline: 1px solid var(--black1_5);
+        overflow-y: scroll;
+    }
+    #instructions {
+      color: paleturquoise;
+      #monaco{
+        height: 60vh;
+      }
+      #vim-button{
+        position: absolute; right: 2.5em;
+        background-size  : contain;
+        background-repeat: no-repeat;
+        background-color : var(--black2);
+        &.on{ background-color: var(--green); }
+      }
+      #vim-status {
+        border-top   : 1px solid var(--black3);
+        border-bottom: 1px solid var(--black1);
+        background-color: var(--black1_5);
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius : 3px;
+        input { 
+          border: none; 
+          outline: none;
+          background-color: var(--black3_5);
+          color: palegreen;
+          width: 50%;
+          margin-left: 10px;
+          padding: 0;
+        }
+      }
+    }
+    #registers {
+      color: var(--green);
+      table {
+        color: inherit;
+      }
+    }
+    #Segment {
+      color: var(--yellow);
+      white-space: pre;
+      .closer{ display: none;                                     }
+      button { background-color: var(--yellow);                   }
+      span   { display: grid; grid-template-columns: 25% 50% 25%; }
+      p      { 
+        border: 1px solid var(--black2); 
+        line-height: 1.9em;
+        outline: 1px solid black;
+        text-align: center;     
+        background-color: var(--black3);
+      }
+    }
+    #Memory {
+      color: var(--orange);
+      table { color: inherit; }
+    }
+    #status {
+      color: var(--green);
+      .closer{display: none;}
+    }
+    #history{
+      color: var(--pink);
+      pre { max-height: 25vh; }
+    }
+    #screen{
+      color: var(--blue);
+      canvas {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background-color:var(--black0);
+        image-rendering: pixelated;
+      }
+    }
+    #examples{
+      color: paleturquoise;
+    }
+}
+

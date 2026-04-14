@@ -1,0 +1,17 @@
+addi a0, x0, 0xA00
+j _draw_white_pixel_and_increment
+$exit
+
+_draw_white_pixel_and_increment: #a0 is frame
+	addi, t0, x0, 1
+	sw  , t0, 0(a0)
+	ret
+	
+_draw_black_pixel_and_increment: #a0 is frame
+	addi, t0, x0, 0
+	sw  , t0, 0(a0)
+	ret
+
+
+.data 
+array: .word 10, 20, 30, 40, 50

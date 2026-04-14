@@ -1,0 +1,21 @@
+{
+  "name": "riscv",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vite": "^8.0.1"
+  },
+  "dependencies": {
+    "monaco": "^1.201704190613.0",
+    "monaco-editor": "^0.53.0",
+    "monaco-vim": "^0.4.4",
+    "vite-plugin-monaco-editor": "^1.1.0"
+  }
+}
