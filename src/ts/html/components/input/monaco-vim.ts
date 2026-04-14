@@ -3,7 +3,7 @@ import { genElem } from '../../util/genElem';
 
 let vimMode:any = null;
 
-export const applyVimModeElements = (element:HTMLElement, editor:IStandaloneCodeEditor)=>{
+export const applyVimModeElements = (element:HTMLElement, editor:any/*whatever the type of monaco is*/)=>{
   const status    = genElem("div"   ,{id:"vim-status"});
   const button    = genElem("button",{id:"vim-button",classList:"closer"});
   element.after(button);

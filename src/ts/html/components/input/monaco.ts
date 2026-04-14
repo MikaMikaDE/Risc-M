@@ -1,8 +1,8 @@
-import {                    } from "./monaco-setup"
-import { REGISTER_NAMES, REGISTER_REGISTRY, type RegisterDefinition     } from "../../../emulator/RegisterRegistry";
-import { LEGAL_INSTRUCTIONS } from "../../../emulator/Instructions";
-import { DATA_DIRECTIVES,SYMBOL_DIRECTIVES,SECTION_DIRECTIVES,CONST_TOKEN_INITIAL, REGEX_REPEAT_SYNTAX, REGEX_IS_LABEL } from "../../../emulator/parsing/ParsingTypes";
-import { REGEX_COMMENT  ,REGEX_HEX, REGEX_NUMBER                      } from "../../../emulator/parsing/ParsingTypes";
+import { } from "./monaco-setup"
+import { LEGAL_INSTRUCTIONS                                                                            } from "../../../emulator/Instructions";
+import { REGISTER_NAMES, REGISTER_REGISTRY, type RegisterDefinition                                    } from "../../../emulator/RegisterRegistry";
+import { DATA_DIRECTIVES,SYMBOL_DIRECTIVES,SECTION_DIRECTIVES,CONST_TOKEN_INITIAL, REGEX_REPEAT_SYNTAX } from "../../../emulator/parsing/ParsingTypes";
+import { REGEX_COMMENT  ,REGEX_HEX, REGEX_NUMBER                                                       } from "../../../emulator/parsing/ParsingTypes";
 import * as monaco from "monaco-editor";
 import { applyVimModeElements } from "./monaco-vim";
 import { COLORS } from "./colors";
