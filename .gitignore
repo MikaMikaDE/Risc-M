@@ -15,8 +15,9 @@ dist-ssr
 # Vite cache
 node_modules/.vite
 
-# Netlify
+# Prods
 .netlify
+.wrangler
 
 # Editor directories and files
 .vscode/*

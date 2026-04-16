@@ -1,6 +1,6 @@
 import { asciiToBytes, concatBytes, encodeManyLittleEndian, parseNumber } from "../util/bitwise";
 import { isLegalInstruction, UnknownInstructionError } from "../Instructions";
-import { CONST_TOKEN_INITIAL, ConstantRedefinedError, isAssemblerConstant, isDataDirective, isSectionDirective, isSymbolDirective, REGEX_IS_LABEL, REGEX_WHITESPACE, UnknownDirectiveError, type DataSegmentState, type PreprocessorState } from "./ParsingTypes";
+import { CONST_TOKEN_INITIAL, ConstantRedefinedError, isAssemblerConstant, isDataDirective, isSectionDirective, isSymbolDirective, REGEX_IS_LABEL, REGEX_WHITESPACE, UnknownDirectiveError, type PreprocessorState } from "./ParsingTypes";
 
 
 
@@ -49,19 +49,15 @@ const parseSymbolDirective = (state:PreprocessorState, tokens:string[]):Preproce
 
 
 const parseAssemblerConstant = (state:PreprocessorState, tokens:string[]):PreprocessorState=>{
-  const name       = CONST_TOKEN_INITIAL.includes(tokens[0]) ? tokens[1] : tokens[0];
-  const term       = CONST_TOKEN_INITIAL.includes(tokens[0]) ? tokens[0] : tokens[1];
-  const value      = parseNumber(tokens[2]);
-  const segment    = state.acc[state.currentSegment] as DataSegmentState;
-  const savedValue = segment.constants.get(name);
-  if (savedValue !== undefined) throw new ConstantRedefinedError(name, term, savedValue);
-  switch(term) {
-    case    "=": segment.labels.set(name, value); return state;
-    case ".equ": segment.labels.set(name, value); return state;
-    case ".set": segment.labels.set(name, value); segment.constants.set(name, value); return state;
-  }
-  console.log(name, term, value);
-  throw new Error("An assembler constant was expected but not found (mika error).");
+  const name        = CONST_TOKEN_INITIAL.includes(tokens[0]) ? tokens[1] : tokens[0];
+  const name_clean  = name.replaceAll(",","");
+  const term        = CONST_TOKEN_INITIAL.includes(tokens[0]) ? tokens[0] : tokens[1];
+  const value       = parseNumber(tokens[2]);
+  const isUsedConst = state.constants.includes(name_clean);
+  if   (isUsedConst) throw new ConstantRedefinedError(name, value, state.variables.get(name_clean));
+  if   (term === ".set") state.constants.push(name_clean); /*= and .equ don't apply constant attribute*/
+  state.variables.set(name_clean, value);  
+  return state;
 }
 
 const parseDataDirective = ( state: PreprocessorState, tokens: string[]): PreprocessorState => {

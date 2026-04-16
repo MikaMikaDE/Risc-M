@@ -5,45 +5,60 @@ default:
 # This programme draws a while pixel across each px of #
 # the simulator's display. It will return to the first #
 # position once it has visited all (16x16 =256) pixels # 
-# ---------------------------------------------------- #
+# ---------------------------------------------------- //
 .section .text
-
-_setup_graphics_mode:
-  addi x1, x0, 1         # Set the graphics mode
-  addi x2, x0, 0x9FF     # to monochrome, by writing 
-  sw   x1, 0(x2)         # a '1' to address 0x9FF
+  addi t0, x0, 2         # Set the graphics mode
+  li   t1, G_MODE_ADDR   # to monochrome, by writing 
+  sb   t0, 0(t1)         # a '2' to address 0x9FF
 
 _reset:
-  addi a0, x0, 0xA00
+  li   a0, SCREEN_START  # reset cursor to 0xA0a
+  addi a1, x0, COL_MAX   # is the bg  color < #F0?
+  bge  a2, a1, _reset_bg # then reset color : #00
+  addi a2, a2, COL_STEP  # else brighten its color
+  j _loop                # and do not  reset color
+_reset_bg:              
+  addi a2, x0, BLACK     # a2 = background color
+  j _loop
+  
 _loop:
-  addi a1, x0, 0x00      # set   color:black
+  add  a1, x0, a2        # set   color:grey
   call _draw_pixel       # draw  pixel
-  addi a0, a0, 0x01      # move  cursor 
-  addi t0, x0, 0xB00     # if at end of screen
-  bgt  a0, t0, _reset    # -> reset cursor 
-  addi a1, x0, 0xFF      # set   color:white
+  addi a0, a0, 1         # move  cursor 
+  li   t0, SCREEN_END    # if at end of screen
+  bge  a0, t0, _reset    # -> reset cursor
+  addi a1, x0, WHITE     # set   color:white
   call _draw_pixel       # draw  pixel
   call _wait_for_next_frame
   j    _loop
         
 _draw_pixel:
 #a0=framePos,  a1=color;  clobbers:t0;  returns:void
-  sw   a1, 0(a0)
+  sb a1, 0(a0)           # store 1 byte = 1 pixel
   ret
 
 _wait_for_next_frame:
 #clobbers:t0-t4,  returns:void
   rdtime t0                  # t0 = start time
-  la     t1, fps             # t1 = fps
+  la     t1, speed           # t1 = speed
   lw     t2, 0(t1)           # t2 = delay
-_spin_lock:
+_spin_wait:
   rdtime t3                  # t3 = current time
   sub    t4, t3, t0          # t4 = elapsed = now - start
-  blt    t4, t2, _spin_lock  # if  :elapsed < now, remain
+  blt    t4, t2, _spin_wait  # if  :elapsed < now, remain
   ret                        # else:return
 
+
+.set COL_MAX,      0xF0  # brightest allowed bg color
+.set WHITE,        0xFF  # the color white
+.set BLACK,        0x00  # the color black
+.set COL_STEP,     0x10  # gradient bg col increase 
+.set G_MODE_ADDR,  0x9FF # address of graphics mode
+.set SCREEN_END,   0xAFF # address of  end  of screen 
+.set SCREEN_START, 0xA00 # address of start of screen
 .section .data
-  fps: .word 30`
+  speed: .word 30
+`
 ,
 
 testCases:

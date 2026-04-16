@@ -27,10 +27,10 @@ export const isAssemblerConstant    = (       tokens:string[]):boolean=> CONST_T
 
 export type PreprocessorSegmentName = Extract<SegmentName,    "text" | "rodata" | "data" | "bss"> ;
 export type DataSegmentKey          = Extract<PreprocessorSegmentName, "rodata" | "data" | "bss"> ;
-export type DataSegmentState        = { labels:Map<string,number>; constants:Map<string, number>  ; memory:Segment; };
-export type TextSegmentState        = { labels:Map<string,number>; instructions:string[][]        ; memory:Segment; };
-export type PreprocessorAcc         = { text  :TextSegmentState  ; rodata        :DataSegmentState; data:DataSegmentState; bss:DataSegmentState; };
-export type PreprocessorState       = { acc   :PreprocessorAcc   ; currentSegment:PreprocessorSegmentName;                  pc:number;           };
+export type DataSegmentState        = { labels:Map<string,number>; memory:Segment; };
+export type TextSegmentState        = { labels:Map<string,number>; memory:Segment; instructions:string[][]; };
+export type PreprocessorAcc         = { text  :TextSegmentState  ; rodata        :DataSegmentState       ; data     :DataSegmentState;   bss      :DataSegmentState;    };
+export type PreprocessorState       = { acc   :PreprocessorAcc   ; currentSegment:PreprocessorSegmentName; variables:Map<string,number>; constants:string[];  pc:number;};
 
 export class UnknownDirectiveError extends Error {
   constructor(directiveName:string) {
@@ -40,8 +40,8 @@ export class UnknownDirectiveError extends Error {
 }
 
 export class ConstantRedefinedError extends Error {
-  constructor(name:string, term:string, savedValue:number) {
-    super(`cannot apply constant: ${name}, ${term}.\n${name} is already defined as ${savedValue}`);
+  constructor(name:string, value:number, savedValue?:number) {
+    super(`cannot apply constant: ".set ${name} ${value}".\n${name} is already defined as ${savedValue}`);
     this.name = "UnknownDirectiveError";
   }
 }

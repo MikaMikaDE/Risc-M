@@ -37,7 +37,8 @@ export class Display {
   refresh(){ 
     if (!this.canvas) throw new Error("No canvas");
     const mode = this.memory.readByte(this.graphicsModeReg);
-    const drawingStrategy = GRAPHICS_MODES[mode] ?? GRAPHICS_MODES[0];
+    if   (mode === 0) return; //no mode = no refresh
+    const drawingStrategy = GRAPHICS_MODES[mode] ?? GRAPHICS_MODES[1];
     const imageData = this.ctx.createImageData(this.width, this.height);
     drawingStrategy(imageData.data, this.memory, this.dispStart, this.num_pixels);
     this.ctx.putImageData(imageData, 0, 0);

@@ -2,10 +2,9 @@ import { type RegisterDefinition, REGISTER_REGISTRY } from "./RegisterRegistry"
 import { Register, TimeRegister, ZeroRegister       } from "./Register"
 import { Memory                           } from "./Memory";
 import { INSTRUCTIONS, isLegalInstruction } from "./Instructions";
-import { BYTE, HALF, KB, WORD             } from "./util/util";
+import { BYTE, HALF, WORD                 } from "./util/util";
 import { assembleInstructions             } from "./parsing/Assemble";
 import { preprocess                       } from "./parsing/Parser";
-import { Segment                          } from "./Segment";
 import { toSigned, unsigned               } from "./util/bitwise";
 
 const MAX_HISTORY_SIZE = 100;
@@ -109,18 +108,18 @@ export class CPU {
   feed(programCode: string): CPU {
     const processed = preprocess(programCode);
     this.memory = new Memory({
-      text  : processed.text  .memory,
-      rodata: processed.rodata.memory,
-      data  : processed.data  .memory,
-      bss   : processed.bss   .memory,
-      heap  : Segment.Heap (KB),
-      stack : Segment.Stack(KB),
+      text  : processed.acc.text  .memory,
+      rodata: processed.acc.rodata.memory,
+      data  : processed.acc.data  .memory,
+      bss   : processed.acc.bss   .memory,
+      //heap  : Segment.Heap (KB),
+      //stack : Segment.Stack(KB),
     });
     this.instrs = assembleInstructions(processed); 
-    if (false) {//toggle bool for debuggin
+    if (false) {//toggle bool for debugging
       console.log("memory", this.memory);
       console.log("instrs", this.instrs);
-      console.log("labels", processed.text.labels);
+      console.log("labels", processed.acc.text.labels);
     }
     return this;
   }

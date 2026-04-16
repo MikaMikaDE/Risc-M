@@ -1,6 +1,7 @@
 import { Segment } from "./Segment";
 import { decodeLittleEndian, encodeLittleEndian } from "./util/bitwise";
-export type SegmentName= "text"  | "data" | "rodata" | "bss" | "stack" | "heap";
+const segNames = ["text", "rodata", "data", /*"stack", "heap",*/"bss"] as const;
+export type SegmentName = typeof segNames[number];
 
 export class Memory {
   text  :Segment = Segment.Text  (0);
@@ -11,14 +12,13 @@ export class Memory {
   stack :Segment = Segment.Stack (0);
   size  :number  = 0;
 
-  static readonly segNames = ["text", "rodata", "heap", "stack", "data", "bss"] as const;
-  get    segments():    Segment[]{ return Memory.segNames.map(name=>this[name]); }
+  get    segments():    Segment[]{ return segNames.map(name=>this[name]); }
   get    bytes   (): Uint8Array[]{ return   this.segments.flatMap(s => s.bytes); }
 //----------------------------------------------------------------------------------------------------------------------------
 /*constructor*/
 //----------------------------------------------------------------------------------------------------------------------------
   constructor(segs?:Record<SegmentName, Segment>) {
-    this.size = (segs) ? Memory.segNames.reduce((offset, name) => {
+    this.size = (segs) ? segNames.reduce((offset, name) => {
       this[name] = segs[name];
       this[name].baseAddress = offset;
       return offset + segs[name].size;
@@ -42,7 +42,7 @@ export class Memory {
     throw new MemoryAccessError(address, this.size);
   }
   getSegmentByName(name:SegmentName) {
-    if (!Memory.segNames.includes(name)) throw new SegmentNotFoundError(name);
+    if (!segNames.includes(name)) throw new SegmentNotFoundError(name);
     return this[name as SegmentName];
   }
   private getSegmentOffset(address: number) {

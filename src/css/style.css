@@ -61,7 +61,6 @@
         border          : 1px solid var(--black3);
         background-color:           var(--black2);
         outline         : 1px solid var(--black0);
-        overflow-x      : scroll;
         margin          : 0;
         width           : 98%; padding: 1%;
         margin-bottom   : var(--gap);
@@ -95,7 +94,7 @@
 /* Closer */
 /* ------------------------------------------------------------------------- */
     --btnCol: #9e2828;
-    button.closer{
+    button.closer, button.icon{
       border             : 1px solid;
       outline            : 2px solid var(--black2);
       background-color   : var(--btnCol);
@@ -104,6 +103,25 @@
       top  : 0.1em; right:0.1em;
       width: 2em  ; height: 2em;
       &:hover{color: white; cursor: pointer; }
+    }
+    button.icon { /*For the data-tooltip*/
+      position: relative;
+      overflow: visible;
+      &.icon::after {
+        content  : attr(data-tooltip);
+        position : absolute;
+        bottom   : 120%;  left:50% ;
+        transform: translateX(-50%);
+        z-index  : 9;
+
+        background : var(--black3);
+        color      : #fff;
+        padding    : 4px 8px;
+        white-space: nowrap; font-size: 12px;
+        border     : 1px solid var(--black2); border-radius: 3px;
+        opacity: 0 ; pointer-events: none   ; transition:opacity 0.1s;
+      }
+      &:hover::after { opacity: 1; }
     }
     .hidden{ 
       display: none; 
@@ -123,6 +141,7 @@
       border-top   : 2px solid var(--black5); 
       border-bottom: 2px solid var(--black1); 
       outline      : 1px solid var(--black0);
+      user-select: none;
       z-index: 1;
       &:first-of-type{ border-top-left-radius : 3px; border-bottom-left-radius : 3px; }
       &:last-of-type { border-top-right-radius: 3px; border-bottom-right-radius: 3px; }
@@ -157,17 +176,18 @@
     }
     #instructions {
       color: paleturquoise;
-      #monaco{
-        height: 60vh;
-      }
-      #vim-button{
-        position: absolute; right: 2.5em;
-        background-size  : contain;
-        background-repeat: no-repeat;
+      #monaco{ height: 60vh; }
+      #save-button, #load-button, #vim-button { 
+        position: absolute; 
+        background-size  : contain; 
+        background-repeat: no-repeat; 
         background-color : var(--black2);
         &.on{ background-color: var(--green); }
+        &#load-button { right: 9em; }
+        &#save-button { right: 6em; }
+        &#vim-button  { right: 3em; }
       }
-      #vim-status {
+      #vim-status  {
         border-top   : 1px solid var(--black3);
         border-bottom: 1px solid var(--black1);
         background-color: var(--black1_5);
@@ -229,4 +249,3 @@
       color: paleturquoise;
     }
 }
-

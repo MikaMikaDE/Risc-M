@@ -3,16 +3,16 @@ import { asImm, MAX_32, toHi32, toLo32 } from "./util/bitwise";
 
 export const INSTRUCTIONS:Record<string, Function> = Object.freeze({
   /*Fake instructions for this emulator*/
-  $exit  :(cpu:CPU                                 )=>{ cpu.shouldExit=true; cpu.exitCode=1;                        },
+  $exit  :(cpu:CPU                        ) => { cpu.shouldExit=true; cpu.exitCode=1; },
   $assert:(cpu:CPU, rs1:string, imm:string) => {
     const actual   = cpu.getVal_U(rs1) >>> 0; //force both vals
     const expected =        asImm(imm) >>> 0; //to unsigned int
     if (actual !== expected) throw new Error(`Assertion failed: Stored(${actual}), expected(${expected})`);
   },
   /*Load Immediate*/
-  li     :(cpu:CPU, rd:string,imm:string           )=> cpu.setReg(rd,                       asImm(imm)              ),
-  lui    :(_cpu:CPU, _rd:string,_imm:string        )=> {throw new UnimplementedInstructionError("lui")              },
-  auipc  :(_cpu:CPU, _rd:string,_imm:string        )=> {throw new UnimplementedInstructionError("auipc")            },
+  li     :(cpu:CPU,   rd:string, imm:string        )=> { cpu.setReg(rd, asImm(imm))                                 },
+  lui    :(_cpu:CPU, _rd:string,_imm:string        )=> {throw new UnimplementedInstructionError("lui"  )            }, //todo
+  auipc  :(_cpu:CPU, _rd:string,_imm:string        )=> {throw new UnimplementedInstructionError("auipc")            }, //todo
   /*Load And Store*/
   la     :(cpu:CPU, rd:string,   symbol:string     )=> cpu.setReg(rd,  asImm(symbol)                                ),
   lw     :(cpu:CPU, rd:string,offsetReg:string     )=> cpu.setReg(rd,  cpu.getWord_S(cpu.calcOffset(offsetReg))     ),

@@ -42,4 +42,16 @@ export const REGISTER_REGISTRY: RegisterDefinition[] = [
   { number: 31      , abiNames:["x31", "t6" ]   , saver: "caller", desc: "Temporary"                        },
 ] as const;
 
-export const REGISTER_NAMES = REGISTER_REGISTRY.map(reg=>reg.abiNames).flatMap(reg=>reg);
+export const REGISTER_DEFINITION_ZERO:RegisterDefinition = {number:0,abiNames:["x0"   ,"zero"],saver:undefined,desc:"Zero (Constant)"       };
+export const REGISTER_DEFINITION_TIME:RegisterDefinition = {number:0,abiNames:["0xC01","time"],saver:undefined,desc:"Control & Status: Time"};
+
+/*
+  * todo: look into these control and status registers?
+cycle                     0xC00       CPU cycle counter
+time                      0xC01       Real-time clock (mirrors mtime)
+instret                   0xC02       Instructions retired
+hpmcounter3–hpmcounter31  0xC03–0xC1F Hardware perf counters
+cycleh, timeh, instreth   0xC80–0xC82 RV32 only: upper 32 bits
+*/
+
+export const REGISTER_NAMES = [...REGISTER_REGISTRY, REGISTER_DEFINITION_TIME, REGISTER_DEFINITION_ZERO].map(reg=>reg.abiNames).flatMap(reg=>reg);

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/Risc-M/',
+  base: '/',
   optimizeDeps: {
     include: ['monaco-editor'],
   },

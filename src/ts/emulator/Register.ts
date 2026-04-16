@@ -1,4 +1,4 @@
-import type { Saver, RegisterDefinition } from "./RegisterRegistry";
+import { type Saver, type RegisterDefinition, REGISTER_DEFINITION_TIME, REGISTER_DEFINITION_ZERO } from "./RegisterRegistry";
 import { BYTE } from "./util/util";
 
 export class Register {
@@ -26,13 +26,13 @@ export class Register {
 }
 
 export class ZeroRegister extends Register {
-  constructor(){super({number:0,abiNames:["x0","zero"],saver:undefined,desc:"Zero"})};
+  constructor(){super(REGISTER_DEFINITION_ZERO)};
   get value():number {return 0;}
   set value(_:number){void   0;}
 }
 
 export class TimeRegister extends Register {
-  constructor(){super({number:0,abiNames:["time"],saver:undefined,desc:"Time"})};
+  constructor(){super(REGISTER_DEFINITION_TIME)};
   get value():number {return Date.now() & 0xFFFFFFFF; }
   set value(_:number){void 0;                         }
 }
